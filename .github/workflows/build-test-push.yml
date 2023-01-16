@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Build the test Docker image
-      run: docker build . --file Dockerfile -t menu-service
+      run: docker build . --file Dockerfile -t emiliamin/menu-service
 
     - name: Checkout the repo
       uses: actions/checkout@v3
@@ -23,5 +23,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Push tag to Docker Hub
-      run: docker push menu-service
+      run: docker push emiliamin/menu-service
 
