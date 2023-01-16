@@ -9,19 +9,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
 
-    - name: Build the test Docker image
-      run: docker build . --file Dockerfile -t emiliamin/menu-service
-
+  # Preparations
     - name: Checkout the repo
       uses: actions/checkout@v3
+
+    - name: Run Database container
+      run: docker run -v postgres_data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=microdb --name db -d postgres:14.0
+    - name: Build the test Docker image
+      run: docker build . --file Dockerfile -t emiliamin/menu-service:latest
+
+
+  # Running containers
+
+    - name: Run Docker container
+      run: docker run -p 8000:80 -d emiliamin/menu-service:latest
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+      
+    - name: Install packages
+      run: pip install pytest requests
+    
+    - name: Run tests
+      run: pytest
         
-    - name: Login to Docker Hub
+
+  # Login in
+    - name: Login into Docker Hub
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Push tag to Docker Hub
-      run: docker push emiliamin/menu-service
+      run: docker push emiliamin/menu-service:latest
 
