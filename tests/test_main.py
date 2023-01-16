@@ -7,7 +7,7 @@ def test_healthcheck():
     assert response.status_code == 200
 
 
-class testMenuItems():
+class TestMenuItems():
     def test_get_blank_items():
         response = requests.get(f'{api_url}/v1/menu_items')
         assert response.status_code == 200
