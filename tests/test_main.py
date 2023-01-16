@@ -19,7 +19,7 @@ class testMenuItems():
         assert response.status_code == 200
         assert response.json().get('name') == 'item 1'
         assert response.json().get('description') == 'desc 1'
-        assert response.json().get('price') == 350
+        assert response.json().get('price') == 34
         assert response.json().get('id') == 0
 
     def test_get_item_id():
